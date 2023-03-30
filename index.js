@@ -3,7 +3,12 @@ require('dotenv').config();
 const routes = require('./router/routes');
 
 const app = express();
+
+// For parsing application/json
 app.use(express.json());
+
+// For parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.PORT;
 
