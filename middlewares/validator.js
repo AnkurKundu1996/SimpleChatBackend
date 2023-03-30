@@ -16,11 +16,14 @@ const validator = (validatorSchema) => {
                         message: element.message,
                     })
                 });
-                return responseHelper(res, 'Validation Error', 422, validationError)
+
+                const data = {
+                    errors: validationError
+                }
+                return responseHelper(res, 'Data Validation Error', 422, data);
             }
             next();
         } catch (e) {
-            console.log(e)
             return responseHelper(res, e.message, 500);
         }
     }
