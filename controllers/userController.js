@@ -65,17 +65,7 @@ const login = async (req, res) => {
     }
 }
 
-//Handles user logout
-const logout = async (req, res) => {
-    try {
-        throw new CustomError('Logged Out', 401);
-    } catch (e) {
-        return responseHelper(res, e.message, e.code);
-    }
-}
-
 module.exports = {
     register,
-    login,
-    logout
+    login
 }
