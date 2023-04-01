@@ -24,7 +24,7 @@ const validator = (validatorSchema) => {
             }
             next();
         } catch (e) {
-            return responseHelper(res, e.message, 500);
+            return responseHelper(res, e.message, e.code ??= 500);
         }
     }
 }
