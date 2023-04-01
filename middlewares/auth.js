@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const db = require('../db/models');
 const responseHelper = require('../helpers/responseHelper');
+const CustomError = require('../utils/customError');
 const User = db.users;
 
 const auth = async (req, res, next) => {
@@ -13,14 +14,14 @@ const auth = async (req, res, next) => {
                 req.user = await User.findByPk(data);
                 next();
             } catch {
-                return responseHelper(res, 'Unauthorized', 401);
+                throw new CustomError('Unauthenticated', 401);
             }
         }
         else {
-            return responseHelper(res, 'A token is required for authentication', 403);
+            throw new CustomError('A token is required for authentication', 403);
         }
     } catch (e) {
-        return responseHelper(res, e.message, e.code ??= 500);
+        return responseHelper(res, e.message, e.code);
     }
 }
 

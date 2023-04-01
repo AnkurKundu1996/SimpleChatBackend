@@ -4,6 +4,7 @@ require('dotenv').config();
 const responseHelper = require('../helpers/responseHelper');
 const sequelize = require('../config/sequelize');
 const db = require('../db/models');
+const CustomError = require('../utils/customError');
 const User = db.users;
 
 //Handles user signup.
@@ -25,7 +26,7 @@ const register = async (req, res) => {
         return responseHelper(res, 'User Registered Successfully', 201, data)
     } catch (e) {
         await transact.rollback();
-        return responseHelper(res, e.message, e.code ??= 500);
+        return responseHelper(res, e.message, e.code);
     }
 }
 
@@ -40,11 +41,11 @@ const login = async (req, res) => {
             }
         });
         if (!user) {
-            return responseHelper(res, 'Invalid Credential', 404);
+            throw new CustomError('Invalid Credential', 404);
         } else {
             const checkPassword = await bcrypt.compare(password, user.password);
             if (!checkPassword) {
-                return responseHelper(res, 'Invalid Credential', 404);
+                throw new CustomError('Invalid Credential', 404);
             } else {
                 const token = jwt.sign({
                     data: user.id,
@@ -60,19 +61,16 @@ const login = async (req, res) => {
             }
         }
     } catch (e) {
-        return responseHelper(res, e.message, e.code ??= 500);
+        return responseHelper(res, e.message, e.code);
     }
 }
 
 //Handles user logout
 const logout = async (req, res) => {
     try {
-        throw ({
-            message: 'Logged Out',
-            code: 401
-        })
+        throw new CustomError('Logged Out', 401);
     } catch (e) {
-        return responseHelper(res, e.message, e.code ??= 500);
+        return responseHelper(res, e.message, e.code);
     }
 }
 
