@@ -41,5 +41,15 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.users = require('./user')(sequelize, DataTypes);
+db.conversations = require('./conversation')(sequelize, DataTypes);
+db.messages = require('./message')(sequelize, DataTypes);
+
+
+db.messages.belongsTo(db.conversations, {
+  foreignKey: 'conversationThread',
+  targetKey: 'threadId',
+  as: 'conversation'
+});
+
 
 module.exports = db;

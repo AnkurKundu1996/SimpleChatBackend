@@ -33,3 +33,20 @@ const io = new Server(server, {
         origin: process.env.FRONT_END_URL
     }
 });
+
+io.on("connection", (socket) => {
+    console.log(socket.id);
+
+    socket.on("join room", (data => {
+        socket.join(data);
+        console.log(`User with id: ${socket.id} joined room: ${data}`);
+    }));
+
+    socket.on("send message", (data) => {
+        socket.to(data.room).emit("receive message", data);
+    })
+
+    socket.on("disconnect", () => {
+        console.log(`User disconnected ${socket.id}`);
+    })
+});

@@ -21,7 +21,7 @@ const auth = async (req, res, next) => {
             throw new CustomError('A token is required for authentication', 403);
         }
     } catch (e) {
-        return responseHelper(res, e.message, e.code);
+        return responseHelper(res, e.message, e.code || 500);
     }
 }
 

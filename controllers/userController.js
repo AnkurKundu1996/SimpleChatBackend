@@ -26,7 +26,7 @@ const register = async (req, res) => {
         return responseHelper(res, 'User Registered Successfully', 201, data)
     } catch (e) {
         await transact.rollback();
-        return responseHelper(res, e.message, e.code);
+        return responseHelper(res, e.message, e.code || 500);
     }
 }
 
@@ -61,7 +61,7 @@ const login = async (req, res) => {
             }
         }
     } catch (e) {
-        return responseHelper(res, e.message, e.code);
+        return responseHelper(res, e.message, e.code || 500);
     }
 }
 
